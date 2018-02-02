@@ -2,6 +2,10 @@
 # yarn lockfile v1
 
 
+"@google/maps@^0.4.5":
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/@google/maps/-/maps-0.4.5.tgz#72eb9cf8e7de944619245d0f8f3f969571ea84d8"
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -151,6 +155,10 @@ block-stream@*:
   resolved "https://registry.yarnpkg.com/block-stream/-/block-stream-0.0.9.tgz#13ebfe778a03205cfe03751481ebb4b3300c126a"
   dependencies:
     inherits "~2.0.0"
+
+bluebird@^3.5.1:
+  version "3.5.1"
+  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.1.tgz#d9551f9de98f1fcda1e683d17ee91a0602ee2eb9"
 
 body-parser@~1.18.2:
   version "1.18.2"
