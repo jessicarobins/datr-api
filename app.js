@@ -3,11 +3,23 @@ const path = require('path')
 const logger = require('morgan')
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 
 const index = require('./routes/index')
 const places = require('./routes/places')
 
 const app = express()
+
+const whitelist = [
+  /localhost:8080/,
+]
+
+const corsOptions = {
+  origin: whitelist,
+  credentials: true
+}
+
+app.use(cors(corsOptions))
 
 app.set('port', process.env.PORT || 3001)
 
