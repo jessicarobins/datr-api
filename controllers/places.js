@@ -32,31 +32,30 @@ const typesObject = {
   ]
 }
 
-exports.activity = async function(req, res) {
-  await sendPlaceJson({
-    res,
-    type: 'activity',
-    location: [39.0976763,-77.03652979999998]
-  })
+exports.index = async function(req, res) {
+  const location = [req.query.latitude, req.query.longitude]
+  try {
+    const response = await Promise.props({
+      activity: getPlaceOfType({ types: typesObject['activity'], location }),
+      food: getPlaceOfType({ types: typesObject['food'], location }),
+      night: getPlaceOfType({ types: typesObject['night'], location })
+    })
+
+    res.json(response)
+  } catch(err) {
+    res.status(404).send(err)
+  }
 }
 
-exports.food = async function(req, res) {
-  await sendPlaceJson({
-    res,
-    type: 'food',
-    location: [39.0976763,-77.03652979999998]
-  })
-}
+exports.activity = sendPlaceJson.bind(null, 'activity')
 
-exports.night = async function(req, res) {
-  await sendPlaceJson({
-    res,
-    type: 'night',
-    location: [39.0976763,-77.03652979999998]
-  })
-}
+exports.food = sendPlaceJson.bind(null, 'food')
 
-async function sendPlaceJson({ type, location, res }) {
+exports.night = sendPlaceJson.bind(null, 'night')
+
+async function sendPlaceJson(type, req, res) {
+  const location = [req.query.latitude, req.query.longitude]
+
   try {
     const result = await getPlaceOfType({
       types: typesObject[type],
