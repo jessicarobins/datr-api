@@ -97,9 +97,9 @@ async function getPlaceOfType({ types, location }) {
 }
 
 async function getPlaceJson({ type, location }) {
-  const { json } = await maps.places({
+  const { json } = await maps.placesNearby({
     location,
-    radius: 5000,
+    radius: 2000,
     type
   })
   .asPromise()
