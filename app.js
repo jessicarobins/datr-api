@@ -7,6 +7,7 @@ const cors = require('cors')
 
 const index = require('./routes/index')
 const places = require('./routes/places')
+const geo = require('./routes/geo')
 
 const app = express()
 
@@ -30,6 +31,7 @@ app.use(cookieParser())
 
 app.use('/', index)
 app.use('/places', places)
+app.use('/geo', geo)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

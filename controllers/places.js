@@ -1,9 +1,5 @@
-const Promise = require('bluebird')
-const sample = require('lodash/sample');
-const maps = require('@google/maps').createClient({
-  key: process.env.GOOGLE_PLACES_API_KEY,
-  Promise
-})
+const sample = require('lodash/sample')
+const maps = require('../config/google')
 
 const typesObject = {
   activity: [
