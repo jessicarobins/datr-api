@@ -11,7 +11,7 @@ const places = require('./routes/places')
 const app = express()
 
 const whitelist = [
-  /localhost:8080/,
+  /d35ubwyjjktcem.cloudfront.net/,
 ]
 
 const corsOptions = {
