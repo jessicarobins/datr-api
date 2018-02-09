@@ -29,9 +29,9 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(cookieParser())
 
-app.use('/', index)
-app.use('/places', places)
-app.use('/geo', geo)
+app.use('/api/', index)
+app.use('/api/places', places)
+app.use('/api/geo', geo)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
