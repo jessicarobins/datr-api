@@ -1,5 +1,7 @@
+const Promise = require('bluebird')
 const sample = require('lodash/sample')
 const maps = require('../config/google')
+const { getCoordsFromZipcode } = require('./util')
 
 const typesObject = {
   activity: [
@@ -29,7 +31,17 @@ const typesObject = {
 }
 
 exports.index = async function(req, res) {
-  const location = [req.query.latitude, req.query.longitude]
+  const { latitude, longitude, zipcode } = req.query
+
+  let location
+  if (latitude && longitude) {
+    location = [req.query.latitude, req.query.longitude]
+  } else if (zipcode) {
+    location = await getCoordsFromZipcode(zipcode)
+  } else {
+    return res.status(422).send('Zipcode or latitude and longitude are required.')
+  }
+
   try {
     const response = await Promise.props({
       activity: getPlaceOfType({ types: typesObject['activity'], location }),
@@ -39,6 +51,7 @@ exports.index = async function(req, res) {
 
     res.json(response)
   } catch(err) {
+    console.log(err)
     res.status(404).send(err)
   }
 }
