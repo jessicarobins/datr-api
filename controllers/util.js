@@ -15,7 +15,7 @@ exports.getCoordsFromZipcode = async function(zipcode) {
     })
   }
 
-  return Promise.reject(new Error(`No results found for ${req.query.zipcode}.`))
+  return Promise.reject(new Error(`No results found for ${zipcode}.`))
 }
 
 exports.getZipcodeFromCoords = async function({ latitude, longitude }) {

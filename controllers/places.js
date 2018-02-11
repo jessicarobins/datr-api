@@ -33,16 +33,15 @@ const typesObject = {
 exports.index = async function(req, res) {
   const { latitude, longitude, zipcode } = req.query
 
-  let location
-  if (latitude && longitude) {
-    location = [req.query.latitude, req.query.longitude]
-  } else if (zipcode) {
-    location = await getCoordsFromZipcode(zipcode)
-  } else {
-    return res.status(422).send('Zipcode or latitude and longitude are required.')
-  }
-
   try {
+    let location
+    if (latitude && longitude) {
+      location = [req.query.latitude, req.query.longitude]
+    } else if (zipcode) {
+      location = await getCoordsFromZipcode(zipcode)
+    } else {
+      return res.status(422).send('Zipcode or latitude and longitude are required.')
+    }
     const response = await Promise.props({
       activity: getPlaceOfType({ types: typesObject['activity'], location }),
       food: getPlaceOfType({ types: typesObject['food'], location }),
