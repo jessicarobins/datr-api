@@ -13,6 +13,7 @@ const app = express()
 
 const whitelist = [
   /d35ubwyjjktcem.cloudfront.net/,
+  /ineedadate.in/
 ]
 
 const corsOptions = {
