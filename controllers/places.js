@@ -99,9 +99,7 @@ async function getPlaceOfType({ types, location }) {
     placeid: place.place_id
   }).asPromise()
 
-  const { website, name, formatted_address } = { ...place, ...response.json.result }
-
-  return Promise.resolve({ website, name, formatted_address, type })
+  return Promise.resolve({ ...place, ...response.json.result, type })
 }
 
 async function getPlaceJson({ type, location }) {
