@@ -19,19 +19,21 @@ const typesObject = {
     'stadium',
     'zoo'
   ],
-  food: [
+  restaurant: [
     'bakery',
     'cafe',
     'restaurant'
   ],
-  night: [
+  bar: [
     'bar',
     'night_club'
   ]
 }
 
 exports.index = async function(req, res) {
-  const { latitude, longitude, zipcode } = req.query
+  const { latitude, longitude, zipcode, radius, categories } = req.query
+
+  const categoriesObject = categories ? JSON.parse(categories) : typesObject
 
   try {
     let location
@@ -42,11 +44,14 @@ exports.index = async function(req, res) {
     } else {
       return res.status(422).send('Zipcode or latitude and longitude are required.')
     }
-    const response = await Promise.props({
-      activity: getPlaceOfType({ types: typesObject['activity'], location }),
-      food: getPlaceOfType({ types: typesObject['food'], location }),
-      night: getPlaceOfType({ types: typesObject['night'], location })
+
+    const promiseMap = {}
+
+    Object.entries(categoriesObject).forEach(([key, value]) => {
+      promiseMap[key] = getPlaceOfType({ types: value, location, radius })
     })
+
+    const response = await Promise.props(promiseMap)
 
     res.json(response)
   } catch(err) {
@@ -55,34 +60,13 @@ exports.index = async function(req, res) {
   }
 }
 
-exports.activity = sendPlaceJson.bind(null, 'activity')
-
-exports.food = sendPlaceJson.bind(null, 'food')
-
-exports.night = sendPlaceJson.bind(null, 'night')
-
-async function sendPlaceJson(type, req, res) {
-  const location = [req.query.latitude, req.query.longitude]
-
-  try {
-    const result = await getPlaceOfType({
-      types: typesObject[type],
-      location
-    })
-    res.json({ [type]: result })
-  } catch(err) {
-    console.log(err)
-    res.status(404).send(err)
-  }
-}
-
-async function getPlaceOfType({ types, location }) {
+async function getPlaceOfType({ types, location, radius }) {
   let type
   let placeJson
 
   for(let i = 0; i < 4; i++) {
     type = sample(types)
-    placeJson = await getPlaceJson({ type, location })
+    placeJson = await getPlaceJson({ type, location, radius })
 
     if (placeJson.results.length > 0 ) {
       break;
@@ -102,10 +86,10 @@ async function getPlaceOfType({ types, location }) {
   return Promise.resolve({ ...place, ...response.json.result, type })
 }
 
-async function getPlaceJson({ type, location }) {
+async function getPlaceJson({ type, location, radius = 2000 }) {
   const { json } = await maps.placesNearby({
     location,
-    radius: 2000,
+    radius: parseInt(radius, 10),
     type
   })
   .asPromise()
